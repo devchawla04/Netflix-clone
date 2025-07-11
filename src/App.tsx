@@ -4,12 +4,12 @@ import Row from "./Row";
 import Requests from "./requests";
 import Banner from "./Banner";
 import Navbar from "./Navbar";
+
 function App() {
   return (
     <div className="app">
       <Navbar />
       <Banner />
-
       <Row
         title="NETFLIX ORIGINALS"
         fetchUrl={Requests.fetchNetflixOriginals}

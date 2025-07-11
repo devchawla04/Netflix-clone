@@ -2,8 +2,17 @@ import React, { useEffect, useState } from "react";
 import axios from "./axios";
 import requests from "./requests";
 import "./Banner.css";
+
+type Movie = {
+  backdrop_path?: string;
+  title?: string;
+  name?: string;
+  original_name?: string;
+  overview?: string;
+};
+
 function Banner() {
-  const [moviebanner, setBanner] = useState([]);
+  const [moviebanner, setBanner] = useState<Movie | null>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,8 +27,8 @@ function Banner() {
     fetchData();
   }, []);
 
-  function truncate(str, n) {
-    return str?.length > n ? str.substr(0, n - 1) + "..." : str;
+  function truncate(str: string | undefined, n: number): string {
+    return str && str.length > n ? str.substr(0, n - 1) + "..." : str || "";
   }
 
   return (
@@ -27,8 +36,7 @@ function Banner() {
       className="banner"
       style={{
         backgroundSize: "cover",
-        backgroundImage: `url(
-            "https://image.tmdb.org/t/p/original/${moviebanner?.backdrop_path}")`,
+        backgroundImage: `url(https://image.tmdb.org/t/p/original/${moviebanner?.backdrop_path})`,
         backgroundPosition: "center center",
       }}
     >
@@ -38,15 +46,11 @@ function Banner() {
             moviebanner?.name ||
             moviebanner?.original_name}
         </h1>
-        <div className="banner_buttons">
-          {/* <button className="banner_button">Play</button>
-<button className="banner_button">My List</button> */}
-        </div>
+        <div className="banner_buttons"></div>
         <h1 className="banner-description">
           {truncate(moviebanner?.overview, 150)}
         </h1>
       </div>
-
       <div className="banner-fade-bottom" />
     </header>
   );

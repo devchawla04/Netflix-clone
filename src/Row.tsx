@@ -4,9 +4,23 @@ import "./row.css";
 import Youtube from "react-youtube";
 import movieTrailer from "movie-trailer";
 
-function Row({ title, fetchUrl, isLargeRow }) {
-  const [Movies, setMovies] = useState([]);
-  const [trailerUrl, setTrailerUrl] = useState("");
+type Movie = {
+  id: number;
+  name?: string;
+  title?: string;
+  poster_path?: string;
+  backdrop_path?: string;
+};
+
+type RowProps = {
+  title: string;
+  fetchUrl: string;
+  isLargeRow?: boolean;
+};
+
+function Row({ title, fetchUrl, isLargeRow = false }: RowProps) {
+  const [Movies, setMovies] = useState<Movie[]>([]);
+  const [trailerUrl, setTrailerUrl] = useState<string>("");
 
   const base_url = "https://image.tmdb.org/t/p/original/";
   useEffect(() => {
@@ -28,16 +42,16 @@ function Row({ title, fetchUrl, isLargeRow }) {
     },
   };
 
-  const handleClick = (movie) => {
+  const handleClick = (movie: Movie) => {
     if (trailerUrl) {
       setTrailerUrl("");
     } else {
       movieTrailer(movie.name || movie?.title || "")
-        .then((url) => {
+        .then((url: string) => {
           const urlParams = new URLSearchParams(new URL(url).search);
-          setTrailerUrl(urlParams.get("v"));
+          setTrailerUrl(urlParams.get("v") || "");
         })
-        .catch((error) => console.log(error));
+        .catch((error: any) => console.log(error));
     }
   };
 
